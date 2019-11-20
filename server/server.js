@@ -1,5 +1,9 @@
 require('./config/config')
 const express = require('express');
+
+// Using Node.js `require()`
+const mongoose = require('mongoose');
+
 const app = express();
 const bodyParser = require('body-parser');
 
@@ -9,38 +13,23 @@ app.use(bodyParser.urlencoded({ extend: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/usuario', function(req, res) {
-    res.json('Holis');
-});
+// Rutas
+app.use(require('./routes/usuario'));
 
-app.post('/usuario', function(req, res) {
 
-    let body = req.body;
-
-    if( body.nombre == undefined ) {
-        res.status(400).json({
-            ok: false,
-            mensaje: 'El nombre es necesario'
-        });
-    } else {
-        res.json({
-            persona: body
-        });
+// Conexión
+mongoose.connect('mongodb://localhost:27017/cafe',
+    (err, res) => {
+        if (err) throw err;
+        console.log('Database CONNECTED');
+    },
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
     }
+);
 
-});
-
-app.put('/usuario/:id', function(req, res) {
-    let id = req.params.id
-    res.json({
-        id
-    });
-});
-
-app.delete('/usuario', function(req, res) {
-    res.json('Holis');
-});
-
+// Escucha
 app.listen(process.env.PORT, () => {
-    console.log('Escuchando puerto: ', process.env.PORT);    
+    console.log('Escuchando puerto: ', process.env.PORT);
 });
