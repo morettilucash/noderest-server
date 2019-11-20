@@ -1,7 +1,10 @@
 {
   "name": "restserver",
   "version": "1.0.0",
-  "description": "",
+  "description": "",  
+  "engines": {
+    "node": "10.16.3"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
