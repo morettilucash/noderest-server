@@ -18,12 +18,13 @@ app.use(require('./routes/usuario'));
 
 
 // Conexión
-mongoose.connect('mongodb://localhost:27017/cafe',
+mongoose.connect(process.env.URLDB,
     (err, res) => {
         if (err) throw err;
         console.log('Database CONNECTED');
     },
     {
+        createIndexes: true,
         useNewUrlParser: true,
         useUnifiedTopology: true
     }
