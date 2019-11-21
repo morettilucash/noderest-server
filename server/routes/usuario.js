@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
 const Usuario = require('../models/usuario')
+const { verificarToken, verificarRolAdmin } = require('../middlewares/autenticacion');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -15,7 +16,7 @@ app.use(bodyParser.json());
 
 
 /// Rutas
-app.get('/usuario/all/', function (req, res) {
+app.get('/usuario/all/', verificarToken, function (req, res) {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -46,7 +47,13 @@ app.get('/usuario/all/', function (req, res) {
         })
 });
 
-app.get('/usuario', function (req, res) {
+app.get('/usuario', verificarToken, function (req, res) {
+
+    // return res.json({
+    //     usuario: req.usuario,
+    //     nombre: req.usuario.nombre,
+    //     email: req.usuario.email
+    // });
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -77,7 +84,7 @@ app.get('/usuario', function (req, res) {
         })
 });
 
-app.post('/usuario', function (req, res) {
+app.post('/usuario', [verificarToken, verificarRolAdmin], function (req, res) {
 
     let body = req.body;
 
@@ -107,7 +114,7 @@ app.post('/usuario', function (req, res) {
     });
 });
 
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id', verificarToken, function (req, res) {
     let id = req.params.id
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
@@ -128,7 +135,7 @@ app.put('/usuario/:id', function (req, res) {
     })
 });
 
-app.delete('/usuario/:id', function (req, res) {
+app.delete('/usuario/:id', verificarToken, function (req, res) {
 
     let id = req.params.id;
     let e = { estado: false };

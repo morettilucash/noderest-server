@@ -1,10 +1,8 @@
 require('./config/config')
 const express = require('express');
-
-// Using Node.js `require()`
 const mongoose = require('mongoose');
-
 const app = express();
+
 const bodyParser = require('body-parser');
 
 // parse applicaction/x-www-form-urlencoded
@@ -14,7 +12,7 @@ app.use(bodyParser.urlencoded({ extend: false }));
 app.use(bodyParser.json());
 
 // Rutas
-app.use(require('./routes/usuario'));
+app.use(require('./routes/index'));
 
 
 // Conexión
